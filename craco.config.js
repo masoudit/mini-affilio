@@ -1,4 +1,8 @@
-const CracoLessPlugin = require('craco-less');
+/* eslint-disable no-undef */
+const CracoLessPlugin = require("craco-less");
+const { CracoAliasPlugin, configPaths } = require("react-app-rewire-alias");
+
+const aliasMap = configPaths("./jsconfig.paths.json");
 
 module.exports = {
   plugins: [
@@ -11,6 +15,10 @@ module.exports = {
           },
         },
       },
+    },
+    {
+      plugin: CracoAliasPlugin,
+      options: { alias: aliasMap },
     },
   ],
 };
