@@ -1,3 +1,4 @@
+import { SettingOutlined, UserOutlined } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, PageHeader } from "antd";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
@@ -26,14 +27,18 @@ const MainLayout = (props) => {
             className="site-header"
             title="Title"
             subTitle="This is a subtitle"
+            extra={[
+              <SettingOutlined style={{ fontSize: "22px" }} key={1} />,
+              <UserOutlined style={{ fontSize: "22px" }} key={1} />,
+            ]}
           />
         </Header>
         <Content style={{ margin: "0 16px" }}>
           <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
+            <Breadcrumb.Item>خانه</Breadcrumb.Item>
+            <Breadcrumb.Item>پیشخوان</Breadcrumb.Item>
           </Breadcrumb>
-          {children}
+          <div>{children}</div>
         </Content>
         <Footer style={{ textAlign: "center" }}>Affiliate 2022</Footer>
       </Layout>

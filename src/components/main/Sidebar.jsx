@@ -10,6 +10,7 @@ import {
 import { Layout, Menu } from "antd";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 import Logo from "@/assets/logo.png";
 
@@ -19,6 +20,7 @@ const { SubMenu } = Menu;
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const onCollapse = () => {
     setCollapsed((old) => !old);
@@ -33,7 +35,7 @@ const Sidebar = () => {
       className="sidebar"
     >
       <div className="menu_logo" onClick={onCollapse}>
-        {!collapsed ? <img src={Logo} /> : ""}
+        {!collapsed ? <img src={Logo} style={{ height: "25px" }} /> : ""}
         {collapsed ? (
           <MenuFoldOutlined className={"collapse_icon"} />
         ) : (
@@ -41,7 +43,11 @@ const Sidebar = () => {
         )}
       </div>
       <Menu className="sidebar_menu" defaultSelectedKeys={["1"]} mode="inline">
-        <Menu.Item key="1" icon={<PieChartOutlined />}>
+        <Menu.Item
+          key="1"
+          icon={<PieChartOutlined />}
+          onClick={() => navigate("/")}
+        >
           {t("Dashboard")}
         </Menu.Item>
         <Menu.Item key="2" icon={<DesktopOutlined />}>
@@ -57,6 +63,20 @@ const Sidebar = () => {
         </SubMenu>
         <Menu.Item key="9" icon={<FileOutlined />}>
           لینک ها
+        </Menu.Item>
+        <Menu.Item
+          key="10"
+          onClick={() => navigate("kits")}
+          icon={<FileOutlined />}
+        >
+          کیت
+        </Menu.Item>
+        <Menu.Item
+          key="11"
+          onClick={() => navigate("404")}
+          icon={<FileOutlined />}
+        >
+          خطاها
         </Menu.Item>
       </Menu>
     </Sider>
