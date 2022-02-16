@@ -16,7 +16,7 @@ moment.locale("fa");
 function App() {
   const handleChange = () => {};
   return (
-    <ConfigProvider locale={locale}>
+    <ConfigProvider locale={locale} direction="rtl">
       <Layout_>xxx</Layout_>
     </ConfigProvider>
   );

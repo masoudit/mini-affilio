@@ -11,9 +11,11 @@
     "antd": "^4.18.6",
     "antd-jalali": "^0.9.4",
     "craco-less": "^2.0.0",
+    "i18next": "^21.6.11",
     "moment-jalaali": "^0.9.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-i18next": "^11.15.4",
     "react-redux": "^7.2.6",
     "react-scripts": "5.0.0"
   },
