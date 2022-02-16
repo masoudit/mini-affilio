@@ -9,6 +9,7 @@ import {
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import Logo from "@/assets/logo.png";
 
@@ -17,6 +18,7 @@ const { SubMenu } = Menu;
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const { t } = useTranslation();
 
   const onCollapse = () => {
     setCollapsed((old) => !old);
@@ -40,7 +42,7 @@ const Sidebar = () => {
       </div>
       <Menu className="sidebar_menu" defaultSelectedKeys={["1"]} mode="inline">
         <Menu.Item key="1" icon={<PieChartOutlined />}>
-          پیشخوان
+          {t("Dashboard")}
         </Menu.Item>
         <Menu.Item key="2" icon={<DesktopOutlined />}>
           رسانه
