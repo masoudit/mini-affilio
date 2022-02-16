@@ -1,4 +1,5 @@
-import { Alert, Breadcrumb, Layout, Menu, PageHeader } from "antd";
+import { Breadcrumb, Layout, Menu, PageHeader } from "antd";
+import PropTypes from "prop-types";
 import React, { useState } from "react";
 
 import Sidebar from "./Sidebar";
@@ -7,7 +8,8 @@ import "./layout.less";
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
-const MainLayout = () => {
+const MainLayout = (props) => {
+  const { children } = props;
   const [collapsed, setCollapsed] = useState();
 
   const onCollapse = (collapsed) => {
@@ -31,12 +33,16 @@ const MainLayout = () => {
             <Breadcrumb.Item>User</Breadcrumb.Item>
             <Breadcrumb.Item>Bill</Breadcrumb.Item>
           </Breadcrumb>
-          <Alert>xxxxxxxxx</Alert>
+          {children}
         </Content>
         <Footer style={{ textAlign: "center" }}>Affiliate 2022</Footer>
       </Layout>
     </Layout>
   );
+};
+
+MainLayout.propTypes = {
+  children: PropTypes.element.isRequired,
 };
 
 export default MainLayout;
