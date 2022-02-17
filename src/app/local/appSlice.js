@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const appSlice = createSlice({
   name: "app",
   initialState: {
-    loading: false,
+    loading: "idle",
     snack: {},
   },
   reducers: {
@@ -36,7 +36,7 @@ export const success = (message, options) => async (dispatch) => {
   );
 };
 
-export const error = (message, options) => async (dispatch) => {
+export const errorSnack = (message, options) => async (dispatch) => {
   dispatch(
     showSnack({
       message,

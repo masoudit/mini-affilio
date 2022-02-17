@@ -1,0 +1,17 @@
+export const VERIFICATION_CODE_COUNT = 4;
+export const VERIFICATION_RESEND_SECONDS = 120;
+export const DEFAULT_LOCALE = "fa";
+export const MOBILE_FIXED_PREFIX = "09";
+export const PHONE_FIXED_PREFIX = "0";
+export const FIRST_NAME_MIN_LENGTH = 3;
+export const FIRST_NAME_MAX_LENGTH = 20;
+export const LAST_NAME_MIN_LENGTH = 3;
+export const LAST_NAME_MAX_LENGTH = 30;
+export const PASSWORD_MIN_LENGTH = 8;
+export const BIRTH_DATE_MIN_AGE = 18;
+export const BIRTH_DATE_MAX_AGE = 70;
+export const ADDRESS_MIN_LENGTH = 15;
+export const ADDRESS_MAX_LENGTH = 100;
+export const IMAGE_MAX_SIZE_MB = 2;
+export const TABLE_PAGES_SIZES = [10, 25, 100];
+export const IMAGE_MIME_TYPES = ["image/jpg", "image/jpeg", "image/png"];

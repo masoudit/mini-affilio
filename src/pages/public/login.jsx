@@ -2,72 +2,84 @@
 // import { PRIVATE_BASE_PATH } from "app/routes";
 // import { useLoginMutation } from "app/services/mock";
 import {
-  Alert,
   Button,
+  Card,
   Checkbox,
   Col,
-  Divider,
+  ConfigProvider,
   Form,
   Input,
   Layout,
   Row,
+  message,
 } from "antd";
-import { useState } from "react";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { accountLogin } from "@/app/local/accountSlice";
+import NatureImage from "@/assets/images/nature.jpg";
 import { useAuth } from "@/utils/hooks/useAuth";
+
+import "./styles.less";
+
+// import { login } from "@/app/local/accountSlice";
 
 const Content = Layout.Content;
 
 export const Login = () => {
   const dispatch = useDispatch();
-  const { push } = useNavigate();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const location = useLocation();
+  const { t } = useTranslation();
+
+  const { profile, error, loading } = useSelector((state) => state.account);
 
   useEffect(() => {
-    if (user?.token) {
-      // const to = location?.state?.from || PRIVATE_BASE_PATH;
-      // push(to);
+    if (profile) {
+      message.success({
+        content: t("auth.successLoginMessage"),
+        key: "login",
+        duration: 1,
+      });
+      const to = location?.state?.from || "/";
+      setTimeout(() => navigate(to), 1000);
+    } else if (error) {
+      message.error({
+        content: t("auth.errorLoginMessage"),
+        key: "login",
+      });
     }
-  }, [user]);
+  }, [profile, error]);
 
-  const [formState, setFormState] = useState({
-    username: "eve.holt@reqres.in",
-    password: "cityslicka",
-  });
+  useEffect(() => {
+    if (loading) {
+      message.loading({
+        content: "Waiting ...",
+        key: "login",
+        duration: loading ? 0 : 1,
+      });
+    }
+  }, [loading]);
 
-  // const [login, { isLoading }] = useLoginMutation();
-
-  const handleChange = ({ target: { name, value } }) =>
-    setFormState((prev) => ({ ...prev, [name]: value }));
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const onFinish = async (e) => {
     try {
-      // const user = await login({
-      //   email: formState.username,
-      //   password: formState.password,
-      // }).unwrap();
-      // dispatch(
-      //   //this is dummy
-      //   updateUser({
-      //     profile:
-      //       formState.password.indexOf("admin") !== -1
-      //         ? {
-      //             first_name: "ADMIN",
-      //             type: "ADMIN",
-      //           }
-      //         : null,
-      //     token: user?.token,
-      //     fetched: formState.password.indexOf("admin") !== -1 ? true : false,
-      //   })
-      // );
-      //it is just needed for token based authentication
-      window.localStorage.setItem("token", user?.token);
+      // const login =
+      dispatch(
+        accountLogin({
+          userName: e.username,
+          password: e.password,
+          rememberMe: e.remember,
+        })
+      );
+      // one way
+      // login.then((r) => {
+      //   console.log("login-----", r);
+      // });
+
+      // window.localStorage.setItem("token", user?.token);
     } catch (err) {
       console.log(err);
     }
@@ -77,75 +89,99 @@ export const Login = () => {
     // <Layout>
     //   <Content>
     <Row justify="space-around" align="middle">
-      <Col span={12} style={{ backgroundColor: "#fff", marginTop: "20vh" }}>
-        <Alert
+      <Col span={10} style={{ marginTop: "30vh" }}>
+        {/* <Alert
           message="Hint: just submit the form. and if you want to see the admin panel
           type admin for password"
-        />
-        <Divider />
-        <Form
-          name="basic"
-          labelCol={{
-            span: 8,
-          }}
-          wrapperCol={{
-            span: 16,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          // onFinish={onFinish}
-          // onFinishFailed={onFinishFailed}
-          autoComplete="off"
-        >
-          <Form.Item
-            label="Username"
-            name="username"
-            rules={[
-              {
-                required: true,
-                message: "Please input your username!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+        /> */}
+        {/* <Divider /> */}
+        <Card className="login__card">
+          <div className="d-flex">
+            <div className="login__image">
+              <div className="image__bg">
+                <img src={NatureImage} />
+              </div>
+              <div className="image__info">
+                <h2>ورود</h2>
+                <p>
+                  Sign In By Signing Up, you can avail full features of our
+                  services. Get an account !!!
+                </p>
+              </div>
+            </div>
+            <Form
+              className="login__form"
+              name="basic"
+              // labelCol={{
+              //   span: 8,
+              // }}
+              wrapperCol={{
+                span: 24,
+              }}
+              initialValues={{
+                remember: true,
+              }}
+              onFinish={onFinish}
+              // onFinishFailed={onFinishFailed}
+              autoComplete="off"
+            >
+              <ConfigProvider direction="ltr">
+                <Form.Item
+                  // label="Username"
+                  name="username"
+                  rules={[
+                    {
+                      required: true,
+                      message: "نام کاربری ضروری",
+                    },
+                  ]}
+                >
+                  <Input size="large" placeholder="شماره تلفن" />
+                </Form.Item>
 
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "Please input your password!",
-              },
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
+                <Form.Item
+                  // label="Password"
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "رمز عبور ضروری",
+                    },
+                  ]}
+                >
+                  <Input.Password size="large" placeholder="* * * * *" />
+                </Form.Item>
+              </ConfigProvider>
 
-          <Form.Item
-            name="remember"
-            valuePropName="checked"
-            wrapperCol={{
-              offset: 8,
-              span: 16,
-            }}
-          >
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
+              <Form.Item
+                name="remember"
+                valuePropName="checked"
+                wrapperCol={{
+                  // offset: 8,
+                  span: 16,
+                }}
+              >
+                <Checkbox>یادآوری رمز عبور</Checkbox>
+              </Form.Item>
 
-          <Form.Item
-            wrapperCol={{
-              offset: 8,
-              span: 16,
-            }}
-          >
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
+              <Form.Item
+                wrapperCol={{
+                  // offset: 8,
+                  span: 16,
+                }}
+                className="login__actions"
+              >
+                <Button size="large" type="primary" htmlType="submit">
+                  ورود
+                </Button>
+                <span className="space-or">یا</span>
+                <Button size="large" type="dashed">
+                  ثبت نام
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
+        </Card>
       </Col>
     </Row>
     //   </Content>

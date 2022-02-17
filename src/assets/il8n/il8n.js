@@ -13,6 +13,9 @@ const resources = {
   fa: {
     translation: {
       Dashboard: "پیشخوان",
+      auth: {
+        errorLoginMessage: "نام کاربری یا رمزعبور اشتباه است",
+      },
     },
   },
 };
