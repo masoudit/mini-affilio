@@ -1,3 +1,5 @@
+@import './../../app/theme.less';
+
 .ant-message {
     top: unset !important;
     bottom: 20px !important;
@@ -7,21 +9,35 @@
     flex-direction: row;
 }
 
-.login{
+.auth{
+    &-wrap{
+        width: 100%;
+    }
     &__card{
+        max-width: 668px;
+        margin: auto !important;
         .d-flex {
             flex-direction: row-reverse;
         }
         .ant-card-body{
             padding: 0px;
         }
-        min-height: 40vh;
+        // min-height: 40vh;
+        @media (max-width: @screen-md) {
+            .d-flex {
+                flex-direction: column;
+            }
+        }
     }
     &__image {
         // flex-grow: 2;
         max-width: 35%;
         background-color: rgba(3,143,222,0.7);
         position: relative;
+        overflow: hidden;
+        @media (max-width: @screen-md) {
+            max-width: unset;
+        }
         // background-image: url('../../assets/images/neature.jpg');
         .image__bg {
             position: absolute;
@@ -31,6 +47,10 @@
             opacity: .5;
         }
         .image__info{
+            h2{
+                color: #fff;
+                font-weight: bold;
+            }
             position: relative;
             z-index: 2;
             padding: 24px;

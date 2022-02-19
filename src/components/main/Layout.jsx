@@ -10,7 +10,9 @@ const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
 const MainLayout = (props) => {
-  const { children } = props;
+  const { children, mode } = props;
+  const isWizard = mode === "wizard";
+
   const [collapsed, setCollapsed] = useState();
 
   const onCollapse = (collapsed) => {
@@ -19,8 +21,7 @@ const MainLayout = (props) => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sidebar />
-
+      <Sidebar mode={mode} />
       <Layout className="site-layout">
         <Header className="site-layout-header" style={{ padding: 0 }}>
           <PageHeader
@@ -34,10 +35,14 @@ const MainLayout = (props) => {
           />
         </Header>
         <Content style={{ margin: "0 16px" }}>
-          <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>خانه</Breadcrumb.Item>
-            <Breadcrumb.Item>پیشخوان</Breadcrumb.Item>
-          </Breadcrumb>
+          {!isWizard ? (
+            <Breadcrumb style={{ margin: "16px 0" }}>
+              <Breadcrumb.Item>خانه</Breadcrumb.Item>
+              <Breadcrumb.Item>پیشخوان</Breadcrumb.Item>
+            </Breadcrumb>
+          ) : (
+            <br />
+          )}
           <div>{children}</div>
         </Content>
         <Footer style={{ textAlign: "center" }}>Affiliate 2022</Footer>
@@ -48,6 +53,7 @@ const MainLayout = (props) => {
 
 MainLayout.propTypes = {
   children: PropTypes.element.isRequired,
+  mode: PropTypes.string,
 };
 
 export default MainLayout;

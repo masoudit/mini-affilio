@@ -8,6 +8,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
+import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -17,24 +18,28 @@ import Logo from "@/assets/logo.png";
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
-const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
+const Sidebar = (props) => {
+  const isWizard = props.mode === "wizard";
+  const [collapsed, setCollapsed] = useState(isWizard || false);
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   const onCollapse = () => {
+    if (isWizard) return;
     setCollapsed((old) => !old);
   };
 
   return (
     <Sider
       width={280}
-      //   collapsible
       collapsed={collapsed}
       onCollapse={onCollapse}
       className="sidebar"
     >
-      <div className="menu_logo" onClick={onCollapse}>
+      <div
+        className={`menu_logo ${collapsed ? "menu_logo--collapsed" : ""}`}
+        onClick={onCollapse}
+      >
         {!collapsed ? <img src={Logo} style={{ height: "25px" }} /> : ""}
         {collapsed ? (
           <MenuFoldOutlined className={"collapse_icon"} />
@@ -42,7 +47,12 @@ const Sidebar = () => {
           <MenuUnfoldOutlined className={"collapse_icon"} />
         )}
       </div>
-      <Menu className="sidebar_menu" defaultSelectedKeys={["1"]} mode="inline">
+      <Menu
+        disabled={isWizard}
+        className="sidebar_menu"
+        defaultSelectedKeys={["1"]}
+        mode="inline"
+      >
         <Menu.Item
           key="1"
           icon={<PieChartOutlined />}
@@ -81,6 +91,10 @@ const Sidebar = () => {
       </Menu>
     </Sider>
   );
+};
+
+Sidebar.propTypes = {
+  mode: PropTypes.string,
 };
 
 export default Sidebar;

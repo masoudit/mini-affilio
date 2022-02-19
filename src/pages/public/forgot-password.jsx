@@ -1,7 +1,7 @@
 // import { updateUser } from "app/local/user";
 // import { PRIVATE_BASE_PATH } from "app/routes";
 // import { useLoginMutation } from "app/services/mock";
-import { Button, Checkbox, ConfigProvider, Form, Input, message } from "antd";
+import { Button, ConfigProvider, Form, Input, message } from "antd";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +13,7 @@ import { useAuth } from "@/utils/hooks/useAuth";
 
 import AuthLayout from "./authLayout";
 
-export const Login = () => {
+export const ForgotPassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -111,31 +111,7 @@ export const Login = () => {
           >
             <Input size="large" placeholder="شماره تلفن" />
           </Form.Item>
-
-          <Form.Item
-            // label="Password"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "رمز عبور ضروری",
-              },
-            ]}
-          >
-            <Input.Password size="large" placeholder="* * * * *" />
-          </Form.Item>
         </ConfigProvider>
-
-        <Form.Item
-          name="remember"
-          valuePropName="checked"
-          wrapperCol={{
-            // offset: 8,
-            span: 16,
-          }}
-        >
-          <Checkbox>یادآوری رمز عبور</Checkbox>
-        </Form.Item>
 
         <Form.Item
           wrapperCol={{
@@ -145,35 +121,22 @@ export const Login = () => {
           className="auth__actions"
         >
           <Button size="large" type="primary" htmlType="submit">
-            ورود
+            دریافت کد
           </Button>
-          <span className="space-or">یا</span>
+          <span className="space-or"></span>
           <Button
             size="large"
             type="dashed"
             onClick={() => {
-              navigate("/register");
+              navigate("/login");
             }}
           >
-            ثبت نام
+            برگشت
           </Button>
-        </Form.Item>
-
-        <Form.Item
-          style={{ margin: 0 }}
-          // name="remember"
-          wrapperCol={{
-            // offset: 8,
-            span: 16,
-          }}
-        >
-          <a onClick={() => navigate("/forgot")}>
-            <b>یادآوری رمز عبور</b>
-          </a>
         </Form.Item>
       </Form>
     </AuthLayout>
   );
 };
 
-export default Login;
+export default ForgotPassword;

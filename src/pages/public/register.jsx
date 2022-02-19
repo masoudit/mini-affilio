@@ -13,7 +13,7 @@ import { useAuth } from "@/utils/hooks/useAuth";
 
 import AuthLayout from "./authLayout";
 
-export const Login = () => {
+export const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -77,9 +77,9 @@ export const Login = () => {
           <img src={NatureImage} />
         </div>
         <div className="image__info">
-          <h2>افیلیو</h2>
+          <h2>به افیلیو بپیوندید</h2>
           <p>با عضویت در پلتفرم افیلیو درآمد خود را چندین برابر کنید.!</p>
-          <a onClick={() => navigate("/register")}>ایجاد اکانت</a>
+          {/* <p>ایجاد اکانت</p> */}
         </div>
       </div>
       <Form
@@ -99,6 +99,19 @@ export const Login = () => {
         autoComplete="off"
       >
         <ConfigProvider direction="ltr">
+          <Form.Item
+            // label="Username"
+            name="email"
+            rules={[
+              {
+                required: true,
+                message: "نام کاربری ضروری",
+              },
+            ]}
+          >
+            <Input size="large" placeholder="شماره تلفن" />
+          </Form.Item>
+
           <Form.Item
             // label="Username"
             name="username"
@@ -145,35 +158,16 @@ export const Login = () => {
           className="auth__actions"
         >
           <Button size="large" type="primary" htmlType="submit">
-            ورود
-          </Button>
-          <span className="space-or">یا</span>
-          <Button
-            size="large"
-            type="dashed"
-            onClick={() => {
-              navigate("/register");
-            }}
-          >
             ثبت نام
           </Button>
-        </Form.Item>
-
-        <Form.Item
-          style={{ margin: 0 }}
-          // name="remember"
-          wrapperCol={{
-            // offset: 8,
-            span: 16,
-          }}
-        >
-          <a onClick={() => navigate("/forgot")}>
-            <b>یادآوری رمز عبور</b>
-          </a>
+          <span className="space-or"></span>
+          <Button size="large" type="dashed" onClick={() => navigate("/login")}>
+            برگشت
+          </Button>
         </Form.Item>
       </Form>
     </AuthLayout>
   );
 };
 
-export default Login;
+export default Register;
