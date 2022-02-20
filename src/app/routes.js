@@ -64,6 +64,7 @@ export const AUTHENTICATED_ROUTES = [
   },
   {
     path: "/kits",
+    titlePage: "kits",
     exact: true,
     component: <UiKit />,
   },

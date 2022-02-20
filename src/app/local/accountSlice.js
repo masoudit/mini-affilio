@@ -16,10 +16,27 @@ export const loginAsync = createAsyncThunk("account/login", async (data) => {
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   } catch (e) {
-    console.log("err-----", e.response.data);
     return e.response.data;
   }
 });
+
+export const registerAsync = createAsyncThunk(
+  "account/register",
+  async (data) => {
+    try {
+      const response = await baseAPI({
+        endPoint: ENDPOINTS.ACCOUNT_REGISTER,
+        body: data,
+        isPublic: true,
+      });
+      console.log("response-----", response);
+      // The value we return becomes the `fulfilled` action payload
+      return response.data;
+    } catch (e) {
+      return e.response.data;
+    }
+  }
+);
 
 const slice = createSlice({
   name: "account",
@@ -43,7 +60,6 @@ const slice = createSlice({
       state.loading = true;
     });
     builder.addCase(loginAsync.fulfilled, (state, action) => {
-      console.log("action----22", action);
       state.loading = false;
       if (action.payload.success) {
         state.profile = action.payload;
@@ -53,7 +69,6 @@ const slice = createSlice({
     });
     builder.addCase(loginAsync.rejected, (state, action) => {
       state.loading = false;
-      console.log("action----", action.error);
       state.error = action.error;
     });
   },
@@ -78,4 +93,8 @@ export const logout = () => async (dispatch) => {
 
 export const accountLogin = (data) => async (dispatch) => {
   return dispatch(loginAsync(data));
+};
+
+export const accountRegister = (data) => async (dispatch) => {
+  return dispatch(registerAsync(data));
 };

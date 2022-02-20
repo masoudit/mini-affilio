@@ -1,22 +1,32 @@
 // import { updateUser } from "app/local/user";
 // import { PRIVATE_BASE_PATH } from "app/routes";
 // import { useLoginMutation } from "app/services/mock";
-import { Button, Checkbox, ConfigProvider, Form, Input, message } from "antd";
+import { InfoCircleOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Checkbox,
+  ConfigProvider,
+  Form,
+  Input,
+  Radio,
+  Select,
+  Tooltip,
+  message,
+} from "antd";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { accountLogin } from "@/app/local/accountSlice";
+import { accountRegister } from "@/app/local/accountSlice";
 import NatureImage from "@/assets/images/nature.jpg";
-import { useAuth } from "@/utils/hooks/useAuth";
 
+// import { useAuth } from "@/utils/hooks/useAuth";
 import AuthLayout from "./authLayout";
 
 export const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useAuth();
   const location = useLocation();
   const { t } = useTranslation();
 
@@ -51,18 +61,16 @@ export const Register = () => {
 
   const onFinish = async (e) => {
     try {
-      // const login =
       dispatch(
-        accountLogin({
-          userName: e.username,
+        accountRegister({
+          mobile: e.mobile,
           password: e.password,
-          rememberMe: e.remember,
+          confirmPassword: e.passwordNew,
+          roleType: e.roleType,
+          // referralId: e.referralId,
+          agreement: e.agreement,
         })
       );
-      // one way
-      // login.then((r) => {
-      //   console.log("login-----", r);
-      // });
 
       // window.localStorage.setItem("token", user?.token);
     } catch (err) {
@@ -100,25 +108,40 @@ export const Register = () => {
       >
         <ConfigProvider direction="ltr">
           <Form.Item
-            // label="Username"
-            name="email"
+            // label="Password"
+            name="userType"
             rules={[
               {
                 required: true,
-                message: "نام کاربری ضروری",
+                message: "ضروری",
               },
             ]}
+            wrapperCol={{
+              // offset: 8,
+              span: 24,
+            }}
           >
-            <Input size="large" placeholder="شماره تلفن" />
+            <Select
+              prefix={
+                <Tooltip title="Extra information">
+                  <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
+                </Tooltip>
+              }
+              size="large"
+              placeholder={t("انتخاب")}
+            >
+              <Select.Option value="china">ناشر</Select.Option>
+              <Select.Option value="usa">فروشگاه</Select.Option>
+            </Select>
           </Form.Item>
 
           <Form.Item
             // label="Username"
-            name="username"
+            name="mobile"
             rules={[
               {
                 required: true,
-                message: "نام کاربری ضروری",
+                message: "ضروری",
               },
             ]}
           >
@@ -137,6 +160,35 @@ export const Register = () => {
           >
             <Input.Password size="large" placeholder="* * * * *" />
           </Form.Item>
+
+          <Form.Item
+            // label="Password"
+            name="passwordNew"
+            rules={[
+              {
+                required: true,
+                message: "رمز عبور ضروری",
+              },
+            ]}
+          >
+            <Input.Password size="large" placeholder="* * * * *" />
+          </Form.Item>
+
+          <Form.Item
+            // label="Password"
+            name="roleType"
+            rules={[
+              {
+                required: true,
+                message: "ضروری",
+              },
+            ]}
+          >
+            <Radio.Group>
+              <Radio value="legal">{t("")}</Radio>
+              <Radio value="noLegal">item 2</Radio>
+            </Radio.Group>
+          </Form.Item>
         </ConfigProvider>
 
         <Form.Item
@@ -144,10 +196,10 @@ export const Register = () => {
           valuePropName="checked"
           wrapperCol={{
             // offset: 8,
-            span: 16,
+            span: 24,
           }}
         >
-          <Checkbox>یادآوری رمز عبور</Checkbox>
+          <Checkbox>با ثبت نام در افیلیو، شرایط و قوانین را می پذیریم</Checkbox>
         </Form.Item>
 
         <Form.Item

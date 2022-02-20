@@ -2,7 +2,9 @@
 // import { PRIVATE_BASE_PATH } from "app/routes";
 // import { useLoginMutation } from "app/services/mock";
 import { Button, Checkbox, ConfigProvider, Form, Input, message } from "antd";
-import { useEffect } from "react";
+import { MaskedInput } from "antd-mask-input";
+import { useEffect, useState } from "react";
+// import { MaskedInput } from "react-hook-mask";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -19,6 +21,7 @@ export const Login = () => {
   const { user } = useAuth();
   const location = useLocation();
   const { t } = useTranslation();
+  const [username, setUsername] = useState();
 
   const { profile, error, loading } = useSelector((state) => state.account);
 
@@ -93,6 +96,7 @@ export const Login = () => {
         }}
         initialValues={{
           remember: true,
+          // username: "09130238277",
         }}
         onFinish={onFinish}
         // onFinishFailed={onFinishFailed}
@@ -108,8 +112,44 @@ export const Login = () => {
                 message: "نام کاربری ضروری",
               },
             ]}
+            style={{ direction: "ltr" }}
           >
-            <Input size="large" placeholder="شماره تلفن" />
+            {/* <Input
+              size="large"
+              placeholder="شماره تلفن"
+            /> */}
+
+            {/* <InputNumber
+              // prefix={"09"}
+              // defaultValue={130238277}
+              formatter={(value) =>
+                // `09 ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+                `09 ${value}`.replace(/^0\d+\s+\d+\s+\d+$/g, " ")
+              }
+              parser={(value) => value.replace(/\$\d?|(,*)/g, "")}
+              style={{ width: "100%" }}
+              // onChange={onChange}
+            /> */}
+            {/* <MaskedInput
+              mask="1111 1111 1111 1111"
+              // name="username"
+              size="20"
+              // onChange={this._onChange}
+            /> */}
+            <MaskedInput
+              // prefix="0"
+              // placeholder=""
+              mask="0111 111 1111"
+              placeholder="شماره تلفن"
+              // name="username"
+              size="large"
+              style={{ textAlign: "center" }}
+              // onChange={(e) => {
+              //   console.log("v-----", e);
+              //   setUsername(e);
+              // }}
+              placeholderChar="-"
+            />
           </Form.Item>
 
           <Form.Item
@@ -121,8 +161,13 @@ export const Login = () => {
                 message: "رمز عبور ضروری",
               },
             ]}
+            style={{ direction: "ltr" }}
           >
-            <Input.Password size="large" placeholder="* * * * *" />
+            <Input.Password
+              size="large"
+              style={{ textAlign: "center" }}
+              placeholder="رمز عبور"
+            />
           </Form.Item>
         </ConfigProvider>
 

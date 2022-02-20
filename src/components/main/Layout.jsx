@@ -26,8 +26,8 @@ const MainLayout = (props) => {
         <Header className="site-layout-header" style={{ padding: 0 }}>
           <PageHeader
             className="site-header"
-            title="Title"
-            subTitle="This is a subtitle"
+            title="پیشخوان"
+            subTitle="افیلیو"
             extra={[
               <SettingOutlined style={{ fontSize: "22px" }} key={1} />,
               <UserOutlined style={{ fontSize: "22px" }} key={1} />,
