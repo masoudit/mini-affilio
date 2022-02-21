@@ -109,45 +109,17 @@ export const Login = () => {
             rules={[
               {
                 required: true,
-                message: "نام کاربری ضروری",
+                message: t("required"),
               },
             ]}
             style={{ direction: "ltr" }}
           >
-            {/* <Input
-              size="large"
-              placeholder="شماره تلفن"
-            /> */}
-
-            {/* <InputNumber
-              // prefix={"09"}
-              // defaultValue={130238277}
-              formatter={(value) =>
-                // `09 ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, " ")
-                `09 ${value}`.replace(/^0\d+\s+\d+\s+\d+$/g, " ")
-              }
-              parser={(value) => value.replace(/\$\d?|(,*)/g, "")}
-              style={{ width: "100%" }}
-              // onChange={onChange}
-            /> */}
-            {/* <MaskedInput
-              mask="1111 1111 1111 1111"
-              // name="username"
-              size="20"
-              // onChange={this._onChange}
-            /> */}
             <MaskedInput
               // prefix="0"
-              // placeholder=""
               mask="0111 111 1111"
-              placeholder="شماره تلفن"
-              // name="username"
+              placeholder={t("auth.phone")}
               size="large"
               style={{ textAlign: "center" }}
-              // onChange={(e) => {
-              //   console.log("v-----", e);
-              //   setUsername(e);
-              // }}
               placeholderChar="-"
             />
           </Form.Item>
@@ -158,7 +130,7 @@ export const Login = () => {
             rules={[
               {
                 required: true,
-                message: "رمز عبور ضروری",
+                message: t("required"),
               },
             ]}
             style={{ direction: "ltr" }}
@@ -166,7 +138,7 @@ export const Login = () => {
             <Input.Password
               size="large"
               style={{ textAlign: "center" }}
-              placeholder="رمز عبور"
+              placeholder={t("auth.password")}
             />
           </Form.Item>
         </ConfigProvider>

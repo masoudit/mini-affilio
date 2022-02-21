@@ -13,16 +13,42 @@ import {
   Tooltip,
   message,
 } from "antd";
-import { useEffect } from "react";
+import { MaskedInput } from "antd-mask-input";
+import Modal from "antd/lib/modal/Modal";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { accountRegister } from "@/app/local/accountSlice";
 import NatureImage from "@/assets/images/nature.jpg";
+import {
+  CONTRACT_TEMPLATE_TYPE,
+  LEGAL_STATUS,
+} from "@/utils/constants/apiConstants";
 
 // import { useAuth } from "@/utils/hooks/useAuth";
 import AuthLayout from "./authLayout";
+
+const TitleToolTip = () => {
+  return (
+    <>
+      <b>PUBLISHER</b>
+      <br />
+      نمایش دهنده آگهی هستم و فضای تبلیغاتی دارم (ناشر) با عضویت در پلتفرم
+      افیلیو به عنوان ناشر، می‌توانید با استفاده از ترافیک سایت یا شبکه‌های
+      اجتماعی خود، مشتریان بسیاری برای فروشندگان جذب کرده و در نهایت کسب درآمد
+      کنید.
+      <br />
+      <br />
+      <b>MERCHANT</b>
+      <br />
+      فروشگاه هستم و ﻣﯽ‌خواهم محصولم را تبلیغ ﮐﻨﻢ (فروشنده) با عضویت در پلتفرم
+      افیلیو به عنوان فروشنده، می‌توانید با استفاده از ترافیک سایت یا شبکه‌های
+      اجتماعی ناشران به دنبال فروش و همچنین کسب درآمد بیشتر باشید.
+    </>
+  );
+};
 
 export const Register = () => {
   const dispatch = useDispatch();
@@ -31,6 +57,20 @@ export const Register = () => {
   const { t } = useTranslation();
 
   const { profile, error, loading } = useSelector((state) => state.account);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   useEffect(() => {
     if (profile) {
@@ -65,7 +105,7 @@ export const Register = () => {
         accountRegister({
           mobile: e.mobile,
           password: e.password,
-          confirmPassword: e.passwordNew,
+          confirmPassword: e.passwordConfirm,
           roleType: e.roleType,
           // referralId: e.referralId,
           agreement: e.agreement,
@@ -76,6 +116,12 @@ export const Register = () => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const openAgreement = (e) => {
+    console.log("v-------", e);
+    e.preventDefault();
+    showModal();
   };
 
   return (
@@ -121,57 +167,44 @@ export const Register = () => {
               span: 24,
             }}
           >
-            <Select
-              prefix={
-                <Tooltip title="Extra information">
-                  <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
-                </Tooltip>
-              }
-              size="large"
-              placeholder={t("انتخاب")}
-            >
-              <Select.Option value="china">ناشر</Select.Option>
-              <Select.Option value="usa">فروشگاه</Select.Option>
-            </Select>
-          </Form.Item>
-
-          <Form.Item
-            // label="Username"
-            name="mobile"
-            rules={[
-              {
-                required: true,
-                message: "ضروری",
-              },
-            ]}
-          >
-            <Input size="large" placeholder="شماره تلفن" />
-          </Form.Item>
-
-          <Form.Item
-            // label="Password"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "رمز عبور ضروری",
-              },
-            ]}
-          >
-            <Input.Password size="large" placeholder="* * * * *" />
-          </Form.Item>
-
-          <Form.Item
-            // label="Password"
-            name="passwordNew"
-            rules={[
-              {
-                required: true,
-                message: "رمز عبور ضروری",
-              },
-            ]}
-          >
-            <Input.Password size="large" placeholder="* * * * *" />
+            {/* <Radio.Group>
+              <Space direction="vertical">
+                {Object.keys(CONTRACT_TEMPLATE_TYPE).map((key) => {
+                  return (
+                    <Radio.Button key={key} value={key}>
+                      <span style={{ marginLeft: "10px" }}>
+                        {t(`auth.${key}`)}
+                      </span>
+                      <Tooltip title={<TitleToolTip />}>
+                        <InfoCircleOutlined
+                          style={{ color: "rgba(0,0,0,.45)", fontSize: "16px" }}
+                        />
+                      </Tooltip>
+                    </Radio.Button>
+                  );
+                })}
+              </Space>
+            </Radio.Group> */}
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Select
+                size="large"
+                style={{ flexGrow: 1, display: "flex", marginLeft: "10px" }}
+                placeholder={t("auth.selectTypeUser")}
+              >
+                {Object.keys(CONTRACT_TEMPLATE_TYPE).map((key) => {
+                  return (
+                    <Select.Option key={key} value={key}>
+                      {t(`auth.${key}`)}
+                    </Select.Option>
+                  );
+                })}
+              </Select>
+              <Tooltip title={<TitleToolTip />}>
+                <InfoCircleOutlined
+                  style={{ color: "rgba(0,0,0,.45)", fontSize: "16px" }}
+                />
+              </Tooltip>
+            </div>
           </Form.Item>
 
           <Form.Item
@@ -185,21 +218,87 @@ export const Register = () => {
             ]}
           >
             <Radio.Group>
-              <Radio value="legal">{t("")}</Radio>
-              <Radio value="noLegal">item 2</Radio>
+              {Object.keys(LEGAL_STATUS).map((key) => {
+                return (
+                  <Radio key={key} value={key}>
+                    {t("auth." + key)}
+                  </Radio>
+                );
+              })}
             </Radio.Group>
           </Form.Item>
         </ConfigProvider>
 
         <Form.Item
-          name="remember"
+          // label="Username"
+          name="mobile"
+          rules={[
+            {
+              required: true,
+              message: t("required"),
+            },
+          ]}
+          style={{ direction: "ltr" }}
+        >
+          <MaskedInput
+            // prefix="0"
+            mask="0111 111 1111"
+            placeholder={t("auth.phone")}
+            size="large"
+            style={{ textAlign: "center", direction: "ltr" }}
+            placeholderChar="-"
+          />
+        </Form.Item>
+
+        <Form.Item
+          // label="Password"
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: t("required"),
+            },
+          ]}
+          style={{ direction: "ltr" }}
+        >
+          <Input.Password
+            size="large"
+            style={{ textAlign: "center" }}
+            placeholder={t("auth.password")}
+          />
+        </Form.Item>
+
+        <Form.Item
+          // label="Password"
+          name="passwordConfirm"
+          rules={[
+            {
+              required: true,
+              message: t("required"),
+            },
+          ]}
+          style={{ direction: "ltr" }}
+        >
+          <Input.Password
+            size="large"
+            style={{ textAlign: "center" }}
+            placeholder={t("auth.passwordConfirm")}
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="agreement"
           valuePropName="checked"
           wrapperCol={{
             // offset: 8,
             span: 24,
           }}
         >
-          <Checkbox>با ثبت نام در افیلیو، شرایط و قوانین را می پذیریم</Checkbox>
+          <Checkbox>
+            با ثبت نام در افیلیو،{" "}
+            <a onClick={openAgreement}>{t("auth.showAgreement")}</a> را می
+            پذیریم
+          </Checkbox>
         </Form.Item>
 
         <Form.Item
@@ -218,6 +317,17 @@ export const Register = () => {
           </Button>
         </Form.Item>
       </Form>
+
+      <Modal
+        title="Basic Modal"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal>
     </AuthLayout>
   );
 };

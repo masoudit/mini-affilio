@@ -15,7 +15,17 @@ const resources = {
       Dashboard: "پیشخوان",
       auth: {
         errorLoginMessage: "نام کاربری یا رمزعبور اشتباه است",
+        selectTypeUser: "انتخاب نوع همکاری",
+        MERCHANT: "فروشنده - فروشگاه هستم",
+        PUBLISHER: "ناشر - آگهی دهنده",
+        NATURAL: "حقوقی",
+        LEGAL: "حقیقی",
+        phone: "شماره تلفن",
+        password: "رمز عبور",
+        passwordConfirm: "تکرار رمز عبور",
+        showAgreement: "نمایش قوانین",
       },
+      required: "* الزامی",
     },
   },
 };
