@@ -19,7 +19,7 @@
         }
 
         input[type='password'] {
-            text-align: center;
+            // text-align: center;
         }
     }
     &__card{
@@ -41,7 +41,15 @@
     &__image {
         // flex-grow: 2;
         max-width: 35%;
-        background-color: rgba(3,143,222,0.7);
+        // background-color: rgba(3,143,222,0.7);
+        // .Rectangle-80 {
+            // width: 309px;
+            // height: 392px;
+            // margin: 0 397px 0 0;
+            // padding: 27px 48px 15px 15px;
+        background-image: linear-gradient(218deg, #3975f6 99%, #113c73 1%);
+        //   }
+
         position: relative;
         overflow: hidden;
         @media (max-width: @screen-md) {
@@ -72,7 +80,7 @@
         // background-color: blue;
         padding: 36px !important;
         input {
-            font-weight: bold;
+            font-weight: 500;
         }
     }
     &__actions{
@@ -85,6 +93,50 @@
             font-weight: bold;
         }
     }
+    &__password {
+        .ant-form-item-explain{
+            &>div{
+                font-size: 0.8em;
+            }
+        }
+    }
+    &__title {
+        margin-bottom: 16px !important;
+    }
+    &__modal {
+        direction: rtl;
+        text-align: justify;
+        &>div{
+            white-space: pre-line;
+        }
+    }
 }
 
+.ant-tooltip{
+    .ant-tooltip-inner {
+        direction: rtl !important;
+        text-align: right !important;
+    }
+}
 
+.icon__roleType{
+    color: rgba(0,0,0,.45);
+    padding: 12px;
+    font-size: 16px;
+    position: absolute;
+    left: 0px;
+}
+
+.codeInput {
+    text-align: center;
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+    -moz-appearance: textfield;
+    }
+}

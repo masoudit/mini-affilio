@@ -3,7 +3,8 @@ export const ENDPOINTS = {
   ACCOUNT_LOGIN: "/Account/Login",
   ACCOUNT_AUTO_LOGIN: "/Account/AutoLogin",
   ACCOUNT_LOGOUT: "/Account/Logout",
-  ACCOUNT_REGISTER: "/Account/RegisterAndVerify",
+  ACCOUNT_REGISTER_AND_VERIFY: "/Account/RegisterAndVerify",
+  ACCOUNT_REGISTER: "/Account/Register",
   ACCOUNT_SEND_CODE: "/Account/unregistered/SendCode",
   ACCOUNT_RESEND_CODE: "/Account/ResendCode",
   ACCOUNT_VERIFY: "/Account/Verify",
@@ -186,4 +187,9 @@ export const CONTRACT_STATUS = {
 export const CONTRACT_TEMPLATE_TYPE = {
   MERCHANT: 1,
   PUBLISHER: 2,
+};
+
+export const CONTRACT_TEMPLATE_TYPE_NAME = {
+  MERCHANT: "MERCHANT",
+  PUBLISHER: "PUBLISHER",
 };

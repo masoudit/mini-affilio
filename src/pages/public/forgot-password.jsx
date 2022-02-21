@@ -78,7 +78,7 @@ export const ForgotPassword = () => {
         </div>
         <div className="image__info">
           <h2>افیلیو</h2>
-          <p>با عضویت در پلتفرم افیلیو درآمد خود را چندین برابر کنید.!</p>
+          <p>با عضویت در پلتفرم افیلیو درآمد خود را چندین برابر کنید!</p>
           <a onClick={() => navigate("/register")}>ایجاد اکانت</a>
         </div>
       </div>

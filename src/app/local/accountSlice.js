@@ -71,6 +71,21 @@ const slice = createSlice({
       state.loading = false;
       state.error = action.error;
     });
+    builder.addCase(registerAsync.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(registerAsync.fulfilled, (state, action) => {
+      state.loading = false;
+      if (action.payload.success) {
+        state.profile = action.payload;
+      } else {
+        state.error = action.payload;
+      }
+    });
+    builder.addCase(registerAsync.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+    });
   },
 });
 

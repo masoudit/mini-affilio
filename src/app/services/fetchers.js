@@ -36,7 +36,8 @@ export function baseAPI(data) {
   const headers_ = { ...axios.defaults.headers.common, ...(headers || {}) };
   return axios({
     url: `${endPoint}`,
-    headers: isPublic ? headers_ : headers_,
+    // headers: isPublic ? headers_ : headers_,
+    headers: headers_,
     method: method || "POST",
     data: body,
   });
