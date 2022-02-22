@@ -64,6 +64,7 @@ export const Register = () => {
   const location = useLocation();
   const { t } = useTranslation();
   const [form] = Form.useForm();
+  const [form2] = Form.useForm();
   const [mode, setMode] = useState(Mode.VERIFY);
 
   const { profile, error, loading } = useSelector((state) => state.account);
@@ -129,6 +130,10 @@ export const Register = () => {
   const openAgreement = (e) => {
     e.preventDefault();
     handleModal();
+  };
+
+  const getPhone = () => {
+    return form.getFieldValue("mobile")?.replaceAll(" ", "-");
   };
 
   return (
@@ -333,7 +338,8 @@ export const Register = () => {
             <Button
               size="large"
               type="dashed"
-              onClick={() => navigate("/login")}
+              // onClick={() => navigate("/login")}
+              onClick={() => setMode(Mode.VERIFY)}
             >
               برگشت
             </Button>
@@ -344,12 +350,15 @@ export const Register = () => {
       )}
 
       {mode === Mode.VERIFY ? (
-        <Form form={form} className="auth__form" name="basic">
+        <Form form={form2} className="auth__form" name="basic">
           <Title level={4} className={"auth__title"}>
             {t("auth.verify")}
           </Title>
-          <p>لطفا کد ارسال شده به شماره xxx را وارد کنید:</p>
-          <a>تغییر شماره موبایل</a>
+          <p>
+            لطفا کد ارسال شده به شماره
+            <b className="auth__phone">{getPhone()}</b> را وارد کنید:
+          </p>
+          <a onClick={() => setMode(Mode.REGISTER)}>تغییر شماره موبایل</a>
           <br />
           <br />
           <div style={{ direction: "ltr" }}>
@@ -368,13 +377,13 @@ export const Register = () => {
               ثبت نام
             </Button>
             <span className="space-or"></span>
-            <Button
+            {/* <Button
               size="large"
               type="dashed"
               onClick={() => setMode(Mode.REGISTER)}
             >
               برگشت
-            </Button>
+            </Button> */}
           </Form.Item>
         </Form>
       ) : (

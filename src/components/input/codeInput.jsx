@@ -1,4 +1,5 @@
-import { useState } from "react";
+import moment from "moment";
+import { useEffect, useState } from "react";
 import ReactCodeInput, { reactCodeInput } from "react-code-input";
 
 const props = {
@@ -35,10 +36,29 @@ const props = {
 
 const CodeInput = () => {
   const [code, setCode] = useState();
+  const [countDown, setCountDown] = useState("02:00");
+
+  useEffect(() => {
+    const promiseTimer = new Promise((resolve) => {
+      const endTime = moment().add(2, "minutes");
+      setInterval(() => {
+        const nowTime = moment();
+        console.log("v-------");
+        const tme = moment
+          .utc(moment(endTime, "HH:mm:ss").diff(moment(nowTime, "HH:mm:ss")))
+          .format("mm:ss");
+        if (tme === "00:00") resolve(true);
+        setCountDown(tme);
+      }, 1000);
+    });
+    promiseTimer;
+  }, []);
+
   const onChange = (e) => {
     // setCode("");
     console.log("e-----", e);
   };
+
   return (
     <div className="codeInput">
       <ReactCodeInput
@@ -52,7 +72,7 @@ const CodeInput = () => {
       <br />
       <div className="">
         <span>زمان باقی مانده :</span>
-        <b>12:12</b>
+        <b>{countDown}</b>
       </div>
     </div>
   );
