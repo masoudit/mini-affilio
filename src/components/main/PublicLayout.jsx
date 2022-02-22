@@ -1,10 +1,9 @@
 import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 
-const PrivateLayout = ({ children }) => {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state?.user?.profile);
+const PublicLayout = ({ children }) => {
+  // const dispatch = useDispatch();
+  // const user = useSelector((state) => state?.user?.profile);
   return (
     <div className="public__page">
       <Outlet />
@@ -12,8 +11,8 @@ const PrivateLayout = ({ children }) => {
   );
 };
 
-PrivateLayout.propTypes = {
-  children: PropTypes.element.isRequired,
+PublicLayout.propTypes = {
+  children: PropTypes.element,
 };
 
-export default PrivateLayout;
+export default PublicLayout;

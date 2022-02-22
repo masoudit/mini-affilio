@@ -21,7 +21,11 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { accountRegister } from "@/app/local/accountSlice";
+import {
+  accountRegister,
+  accountSendCode,
+  clearState,
+} from "@/app/local/accountSlice";
 import CodeInput from "@/components/input/codeInput";
 // import NatureImage from "@/assets/images/nature.jpg";
 import {
@@ -65,9 +69,11 @@ export const Register = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const [form2] = Form.useForm();
-  const [mode, setMode] = useState(Mode.VERIFY);
+  const [mode, setMode] = useState(Mode.REGISTER);
 
-  const { profile, error, loading } = useSelector((state) => state.account);
+  const { register, verify, error, loading } = useSelector(
+    (state) => state.account
+  );
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -79,49 +85,89 @@ export const Register = () => {
   };
 
   useEffect(() => {
-    if (profile) {
-      message.success({
-        content: t("auth.successLoginMessage"),
+    if (register) {
+      if (register?.success) {
+        message.success({
+          content: t("auth.successRegisterMessage"),
+          key: "login",
+          duration: 2,
+        });
+        // autoLogin
+        setTimeout(() => navigate("/login"), 1000);
+      }
+    }
+  }, [register]);
+
+  useEffect(() => {
+    if (verify?.success) {
+      setMode(Mode.VERIFY);
+      message.loading({
+        content: "loading ...",
         key: "login",
         duration: 1,
       });
-      setMode();
-      // const to = location?.state?.from || "/";
-      // setTimeout(() => navigate(to), 1000);
-    } else if (error) {
+    }
+  }, [verify]);
+
+  useEffect(() => {
+    if (error) {
       const errorMessage = error?.Message || getLastError(error);
       message.error({
         content: errorMessage,
         key: "login",
       });
     }
-  }, [profile, error]);
+  }, [error]);
 
-  useEffect(() => {
-    if (loading) {
-      message.loading({
-        content: "Waiting ...",
-        key: "login",
-        duration: loading ? 0 : 1,
-      });
-    }
-  }, [loading]);
+  // useEffect(() => {
+  //   if (loading) {
+  //     message.loading({
+  //       content: t("loading"),
+  //       key: "login",
+  //       duration: loading ? 0 : 1,
+  //     });
+  //   }
+  // }, [loading]);
 
   const onFinish = async (e) => {
     try {
-      const mobile_ = e.mobile.trim().replaceAll(" ", "");
+      await onSendCode();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onSendCode = async (e) => {
+    try {
+      const phone = form.getFieldValue("mobile").replaceAll(" ", "").trim();
+      return await dispatch(accountSendCode({ username: phone, consumer: 1 }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onFinishVerify = async (e) => {
+    try {
+      const phone = form.getFieldValue("mobile").replaceAll(" ", "").trim();
+      const password = form.getFieldValue("password");
+      const passwordConfirm = form.getFieldValue("passwordConfirm");
+      const agreement = form.getFieldValue("agreement");
+      const userType = form.getFieldValue("userType");
+
+      // const phone = form.getFieldsValue()
+      // const mobile_ = e.mobile.trim().replaceAll(" ", "");
+      // dispatch(accountVerify({ token: e.code, username: phone, consumer: 1 }));
+      // window.localStorage.setItem("token", user?.token);
       dispatch(
         accountRegister({
-          mobile: mobile_,
-          password: e.password,
-          confirmPassword: e.passwordConfirm,
-          roleType: e.roleType,
-          // referralId: e.referralId,
-          agreement: e.agreement,
+          token: e.code,
+          mobile: phone,
+          password: password,
+          confirmPassword: passwordConfirm,
+          roleType: userType,
+          agreement: agreement,
         })
       );
-
-      // window.localStorage.setItem("token", user?.token);
     } catch (err) {
       console.log(err);
     }
@@ -134,6 +180,11 @@ export const Register = () => {
 
   const getPhone = () => {
     return form.getFieldValue("mobile")?.replaceAll(" ", "-");
+  };
+
+  const navigateTo = (name) => {
+    dispatch(clearState());
+    navigate(name);
   };
 
   return (
@@ -338,8 +389,8 @@ export const Register = () => {
             <Button
               size="large"
               type="dashed"
-              // onClick={() => navigate("/login")}
-              onClick={() => setMode(Mode.VERIFY)}
+              onClick={() => navigateTo("/login")}
+              // onClick={() => setMode(Mode.VERIFY)}
             >
               برگشت
             </Button>
@@ -350,7 +401,12 @@ export const Register = () => {
       )}
 
       {mode === Mode.VERIFY ? (
-        <Form form={form2} className="auth__form" name="basic">
+        <Form
+          form={form2}
+          onFinish={onFinishVerify}
+          className="auth__form"
+          name="basic"
+        >
           <Title level={4} className={"auth__title"}>
             {t("auth.verify")}
           </Title>
@@ -362,7 +418,9 @@ export const Register = () => {
           <br />
           <br />
           <div style={{ direction: "ltr" }}>
-            <CodeInput />
+            <Form.Item noStyle name="code" rules={[{ required: true }]}>
+              <CodeInput form={form2} sendCode={onSendCode} />
+            </Form.Item>
           </div>
           <br />
 
@@ -374,7 +432,7 @@ export const Register = () => {
             className="auth__actions"
           >
             <Button size="large" type="primary" htmlType="submit">
-              ثبت نام
+              تایید
             </Button>
             <span className="space-or"></span>
             {/* <Button

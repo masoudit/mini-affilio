@@ -2,12 +2,12 @@
 // import { PRIVATE_BASE_PATH } from "app/routes";
 // import { useLoginMutation } from "app/services/mock";
 import { Button, ConfigProvider, Form, Input, message } from "antd";
+import Title from "antd/lib/typography/Title";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { accountLogin } from "@/app/local/accountSlice";
 import NatureImage from "@/assets/images/nature.jpg";
 import { useAuth } from "@/utils/hooks/useAuth";
 
@@ -23,20 +23,20 @@ export const ForgotPassword = () => {
   const { profile, error, loading } = useSelector((state) => state.account);
 
   useEffect(() => {
-    if (profile) {
-      message.success({
-        content: t("auth.successLoginMessage"),
-        key: "login",
-        duration: 1,
-      });
-      const to = location?.state?.from || "/";
-      setTimeout(() => navigate(to), 1000);
-    } else if (error) {
-      message.error({
-        content: t("auth.errorLoginMessage"),
-        key: "login",
-      });
-    }
+    // if (profile) {
+    //   message.success({
+    //     content: t("auth.successLoginMessage"),
+    //     key: "login",
+    //     duration: 1,
+    //   });
+    //   const to = location?.state?.from || "/";
+    //   setTimeout(() => navigate(to), 1000);
+    // } else if (error) {
+    //   message.error({
+    //     content: t("auth.errorLoginMessage"),
+    //     key: "login",
+    //   });
+    // }
   }, [profile, error]);
 
   useEffect(() => {
@@ -52,18 +52,10 @@ export const ForgotPassword = () => {
   const onFinish = async (e) => {
     try {
       // const login =
-      dispatch(
-        accountLogin({
-          userName: e.username,
-          password: e.password,
-          rememberMe: e.remember,
-        })
-      );
       // one way
       // login.then((r) => {
       //   console.log("login-----", r);
       // });
-
       // window.localStorage.setItem("token", user?.token);
     } catch (err) {
       console.log(err);
@@ -98,6 +90,9 @@ export const ForgotPassword = () => {
         // onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
+        <Title level={4} className={"auth__title"}>
+          {t("auth.forgot")}
+        </Title>
         <ConfigProvider direction="ltr">
           <Form.Item
             // label="Username"
@@ -109,7 +104,7 @@ export const ForgotPassword = () => {
               },
             ]}
           >
-            <Input size="large" placeholder="شماره تلفن" />
+            <Input disabled size="large" placeholder="شماره تلفن" />
           </Form.Item>
         </ConfigProvider>
 

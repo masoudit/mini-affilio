@@ -1,6 +1,7 @@
-import { Card, Col, Row, Steps } from "antd";
+import { Card, Col, Row, Steps, Switch } from "antd";
 import { Button, Form, Input, InputNumber } from "antd";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import "./styles.less";
 
@@ -27,6 +28,7 @@ const StepOne = () => {
       range: "${label} must be between ${min} and ${max}",
     },
   };
+  const { t } = useTranslation();
 
   const onFinish = (values) => {
     console.log(values);
@@ -39,21 +41,24 @@ const StepOne = () => {
         name="nest-messages"
         onFinish={onFinish}
         validateMessages={validateMessages}
+        initialValues={{
+          name: "",
+        }}
       >
         <Form.Item
-          name={["user", "name"]}
-          label="Name"
+          name={["user", "firstName"]}
+          label={t("firstName")}
           rules={[
             {
               required: true,
             },
           ]}
         >
-          <Input />
+          <Input value="" />
         </Form.Item>
         <Form.Item
-          name={["user", "email"]}
-          label="Email"
+          name={["user", "lastName"]}
+          label={t("lastName")}
           rules={[
             {
               type: "email",
@@ -75,12 +80,12 @@ const StepOne = () => {
         >
           <InputNumber />
         </Form.Item>
-        <Form.Item name={["user", "website"]} label="Website">
+        {/* <Form.Item name={["user", "website"]} label="Website">
           <Input />
-        </Form.Item>
-        <Form.Item name={["user", "introduction"]} label="Introduction">
+        </Form.Item> */}
+        {/* <Form.Item name={["user", "introduction"]} label="Introduction">
           <Input.TextArea />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 2 }}>
           <Button type="primary" htmlType="submit">
             Submit
@@ -106,6 +111,15 @@ export default function RegisterWizard() {
     <div className="wizard">
       <br />
       {/* <h1>ثبت نام</h1> */}
+
+      <Row gutter={[16, 16]} align="middle" justify="">
+        <Col span={2}></Col>
+        <Col span={20}>
+          <Form.Item valuePropName="checked">
+            <Switch size="default" title="xx" />
+          </Form.Item>
+        </Col>
+      </Row>
       <Row gutter={[16, 16]} align="middle" justify="center">
         <Col span={20}>
           <Card style={{ marginTop: 16 }} loading={loading}>

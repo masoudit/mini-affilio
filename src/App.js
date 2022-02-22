@@ -6,14 +6,14 @@ import moment from "moment-jalaali";
 import React, { Suspense, useMemo } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import { PUBLIC_ROUTES, WIZARD_ROUTES, getPrivateRoutes } from "@/app/routes";
+import { PUBLIC_ROUTES, getPrivateRoutes } from "@/app/routes";
 
 import "./App.less";
 import NotFound from "./components/main/404";
 import AppLoading from "./components/main/Loading";
 import PrivateLayout from "./components/main/PrivateLayout";
 import PublicLayout from "./components/main/PublicLayout";
-import RegisterLayout from "./components/main/RegisterLayout";
+// import RegisterLayout from "./components/main/RegisterLayout";
 // import RegisterLayout from "./components/main/RegisterLayout";
 import { useAuth } from "./utils/hooks/useAuth";
 
@@ -39,11 +39,11 @@ function App() {
               ))}
             </Route>
 
-            <Route element={<RegisterLayout />}>
+            {/* <Route element={<RegisterLayout />}>
               {WIZARD_ROUTES.map((route, idx) => (
                 <Route key={idx} path={route.path} element={route.component} />
               ))}
-            </Route>
+            </Route> */}
 
             <Route element={<PrivateLayout />}>
               {privateRoutes.map((route, idx) => (

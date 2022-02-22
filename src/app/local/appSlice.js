@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const appSlice = createSlice({
   name: "app",
   initialState: {
-    loading: "idle",
+    loading: false,
     snack: {},
   },
   reducers: {

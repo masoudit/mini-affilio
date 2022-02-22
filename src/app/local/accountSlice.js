@@ -12,7 +12,6 @@ export const loginAsync = createAsyncThunk("account/login", async (data) => {
       body: data,
       isPublic: true,
     });
-    console.log("response-----", response);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   } catch (e) {
@@ -20,16 +19,96 @@ export const loginAsync = createAsyncThunk("account/login", async (data) => {
   }
 });
 
+export const autoLoginAsync = createAsyncThunk(
+  "account/autoLogin",
+  async (data) => {
+    try {
+      const response = await baseAPI({
+        endPoint: ENDPOINTS.ACCOUNT_AUTO_LOGIN,
+        body: data,
+      });
+      // The value we return becomes the `fulfilled` action payload
+      return response.data;
+    } catch (e) {
+      return e.response.data;
+    }
+  }
+);
+
 export const registerAsync = createAsyncThunk(
   "account/register",
   async (data) => {
     try {
       const response = await baseAPI({
-        endPoint: ENDPOINTS.ACCOUNT_REGISTER,
+        endPoint: ENDPOINTS.ACCOUNT_REGISTER_AND_VERIFY,
         body: data,
         isPublic: true,
       });
-      console.log("response-----", response);
+      // The value we return becomes the `fulfilled` action payload
+      return response.data;
+    } catch (e) {
+      return e.response.data;
+    }
+  }
+);
+
+export const sendCodeAsync = createAsyncThunk(
+  "account/sendCode",
+  async (data) => {
+    try {
+      const response = await baseAPI({
+        endPoint: ENDPOINTS.ACCOUNT_SEND_CODE,
+        body: data,
+      });
+      // The value we return becomes the `fulfilled` action payload
+      return response.data;
+    } catch (e) {
+      return e.response.data;
+    }
+  }
+);
+
+export const resendCodeAsync = createAsyncThunk(
+  "account/resendCode",
+  async (data) => {
+    try {
+      const response = await baseAPI({
+        endPoint: ENDPOINTS.ACCOUNT_RESEND_CODE,
+        body: data,
+      });
+      // The value we return becomes the `fulfilled` action payload
+      return response.data;
+    } catch (e) {
+      return e.response.data;
+    }
+  }
+);
+
+export const verifyAsync = createAsyncThunk("account/verify", async (data) => {
+  try {
+    const response = await baseAPI({
+      endPoint: ENDPOINTS.ACCOUNT_VERIFY,
+      body: data,
+    });
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  } catch (e) {
+    return e.response.data;
+  }
+});
+
+export const accountDetailAsync = createAsyncThunk(
+  "account/useDetail",
+  async (data) => {
+    try {
+      const end_ = ENDPOINTS.ACCOUNT_GET_USER_DETAIL.replace(
+        "{user_id}",
+        data.uId
+      );
+      const response = await baseAPI({
+        endPoint: end_,
+        // body: data,
+      });
       // The value we return becomes the `fulfilled` action payload
       return response.data;
     } catch (e) {
@@ -42,11 +121,18 @@ const slice = createSlice({
   name: "account",
   initialState: {
     profile: null,
+    verify: null,
+    register: null,
     loading: false,
     error: null,
     // token: window.localStorage.getItem("token"),
   },
   reducers: {
+    clearState: (state) => {
+      state.loading = false;
+      state.error = null;
+      state.profile = null;
+    },
     updateUser: (state, { payload: { profile, token, fetched = false } }) => {
       state.profile = profile;
       // state.token = token;
@@ -58,6 +144,7 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(loginAsync.pending, (state) => {
       state.loading = true;
+      state.error = null;
     });
     builder.addCase(loginAsync.fulfilled, (state, action) => {
       state.loading = false;
@@ -71,13 +158,24 @@ const slice = createSlice({
       state.loading = false;
       state.error = action.error;
     });
+    builder.addCase(autoLoginAsync.fulfilled, (state, action) => {
+      state.loading = false;
+      state.register = null;
+      state.verify = null;
+      if (action.payload.success) {
+        state.profile = action.payload;
+      } else {
+        state.error = action.payload;
+      }
+    });
     builder.addCase(registerAsync.pending, (state) => {
       state.loading = true;
+      state.error = null;
     });
     builder.addCase(registerAsync.fulfilled, (state, action) => {
       state.loading = false;
       if (action.payload.success) {
-        state.profile = action.payload;
+        state.register = action.payload;
       } else {
         state.error = action.payload;
       }
@@ -86,10 +184,60 @@ const slice = createSlice({
       state.loading = false;
       state.error = action.error;
     });
+    builder.addCase(verifyAsync.pending, (state) => {
+      state.loading = true;
+      state.verify = null;
+      state.error = null;
+    });
+    builder.addCase(verifyAsync.fulfilled, (state, action) => {
+      state.loading = false;
+      if (action.payload.success) {
+        state.verify = action.payload;
+      } else {
+        state.error = action.payload;
+      }
+    });
+    builder.addCase(verifyAsync.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+    });
+    builder.addCase(sendCodeAsync.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(sendCodeAsync.fulfilled, (state, action) => {
+      state.loading = false;
+      if (action.payload.success) {
+        state.verify = action.payload;
+      } else {
+        state.error = action.payload;
+      }
+    });
+    builder.addCase(sendCodeAsync.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+    });
+    // builder.addCase(accountDetailAsync.pending, (state) => {
+    //   state.loading = true;
+    //   state.error = null;
+    // });
+    builder.addCase(accountDetailAsync.fulfilled, (state, action) => {
+      state.loading = false;
+      if (action.payload.success) {
+        state.profile = action.payload;
+      }
+      // else {
+      //   state.error = action.payload;
+      // }
+    });
+    // builder.addCase(accountDetailAsync.rejected, (state, action) => {
+    //   // state.loading = false;
+    //   state.error = action.error;
+    // });
   },
 });
 
-export const { updateUser } = slice.actions;
+export const { updateUser, clearState } = slice.actions;
 
 export default slice.reducer;
 
@@ -110,6 +258,23 @@ export const accountLogin = (data) => async (dispatch) => {
   return dispatch(loginAsync(data));
 };
 
+// could RTKQuery
 export const accountRegister = (data) => async (dispatch) => {
   return dispatch(registerAsync(data));
+};
+
+export const accountVerify = (data) => async (dispatch) => {
+  return dispatch(verifyAsync(data));
+};
+
+export const accountSendCode = (data) => async (dispatch) => {
+  return dispatch(sendCodeAsync(data));
+};
+
+export const accountAutoLogin = (data) => async (dispatch) => {
+  return dispatch(autoLoginAsync(data));
+};
+
+export const accountUserDetail = (data) => async (dispatch) => {
+  return dispatch(accountDetailAsync(data));
 };

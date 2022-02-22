@@ -48,13 +48,13 @@ export const ADMIN_ROUTES = [
   },
 ];
 
-export const WIZARD_ROUTES = [
-  {
-    path: "/wizard",
-    exact: true,
-    component: <RegisterWizard />,
-  },
-];
+// export const WIZARD_ROUTES = [
+//   {
+//     path: "/wizard",
+//     exact: true,
+//     component: <RegisterWizard />,
+//   },
+// ];
 
 export const AUTHENTICATED_ROUTES = [
   {
@@ -72,6 +72,11 @@ export const AUTHENTICATED_ROUTES = [
     path: "/counter",
     exact: true,
     component: <Counter />,
+  },
+  {
+    path: "/wizard",
+    exact: true,
+    component: <RegisterWizard />,
   },
 ];
 

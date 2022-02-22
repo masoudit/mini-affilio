@@ -3,13 +3,13 @@
 // import { useLoginMutation } from "app/services/mock";
 import { Button, Checkbox, ConfigProvider, Form, Input, message } from "antd";
 import { MaskedInput } from "antd-mask-input";
+import Title from "antd/lib/typography/Title";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { accountLogin } from "@/app/local/accountSlice";
-import NatureImage from "@/assets/images/nature.jpg";
+import { accountLogin, clearState } from "@/app/local/accountSlice";
 import { useAuth } from "@/utils/hooks/useAuth";
 
 import AuthLayout from "./authLayout";
@@ -31,7 +31,9 @@ export const Login = () => {
         key: "login",
         duration: 1,
       });
-      const to = location?.state?.from || "/";
+      // !@TODO Remove this after backend updated
+      localStorage.setItem("uId", profile?.data?.user_id);
+      const to = location?.state?.from || "/wizard";
       setTimeout(() => navigate(to), 1000);
     } else if (error) {
       message.error({
@@ -41,22 +43,24 @@ export const Login = () => {
     }
   }, [profile, error]);
 
-  useEffect(() => {
-    if (loading) {
-      message.loading({
-        content: "Waiting ...",
-        key: "login",
-        duration: loading ? 0 : 1,
-      });
-    }
-  }, [loading]);
+  // useEffect(() => {
+  //   if (loading) {
+  //     message.loading({
+  //       content: t("loading"),
+  //       key: "login",
+  //       duration: loading ? 0 : 1,
+  //     });
+  //   }
+  // }, [loading]);
 
   const onFinish = async (e) => {
     try {
       // const login =
+      const phone = e.username.replaceAll(" ", "").trim();
+
       dispatch(
         accountLogin({
-          userName: e.username,
+          userName: phone,
           password: e.password,
           rememberMe: e.remember,
         })
@@ -72,16 +76,19 @@ export const Login = () => {
     }
   };
 
+  const navigateTo = (name) => {
+    dispatch(clearState());
+    navigate(name);
+  };
+
   return (
     <AuthLayout>
       <div className="auth__image">
-        <div className="image__bg">
-          <img src={NatureImage} />
-        </div>
+        <div className="image__bg">{/* <img src={NatureImage} /> */}</div>
         <div className="image__info">
           <h2>افیلیو</h2>
           <p>با عضویت در پلتفرم افیلیو درآمد خود را چندین برابر کنید!</p>
-          <a onClick={() => navigate("/register")}>ایجاد اکانت</a>
+          {/* <a onClick={() => navigate("/register")}>ایجاد اکانت</a> */}
         </div>
       </div>
       <Form
@@ -101,6 +108,9 @@ export const Login = () => {
         // onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
+        <Title level={4} className={"auth__title"}>
+          {t("auth.login")}
+        </Title>
         <ConfigProvider direction="ltr">
           <Form.Item
             // label="Username"
@@ -118,7 +128,7 @@ export const Login = () => {
               mask="0111 111 1111"
               placeholder={t("auth.phone")}
               size="large"
-              style={{ textAlign: "center" }}
+              style={{ textAlign: "right" }}
               placeholderChar="-"
             />
           </Form.Item>
@@ -132,7 +142,8 @@ export const Login = () => {
                 message: t("required"),
               },
             ]}
-            style={{ direction: "ltr" }}
+            className="auth__password"
+            // style={{ direction: "ltr" }}
           >
             <Input.Password
               size="large"
@@ -167,9 +178,7 @@ export const Login = () => {
           <Button
             size="large"
             type="dashed"
-            onClick={() => {
-              navigate("/register");
-            }}
+            onClick={() => navigateTo("/register")}
           >
             ثبت نام
           </Button>
@@ -183,7 +192,7 @@ export const Login = () => {
             span: 16,
           }}
         >
-          <a onClick={() => navigate("/forgot")}>
+          <a onClick={() => navigateTo("/forgot")}>
             <b>یادآوری رمز عبور</b>
           </a>
         </Form.Item>
