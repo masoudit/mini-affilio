@@ -39,6 +39,10 @@ const resources = {
         successRegisterMessage: "ثبت نام با موفقیت انجام شد.",
         successLoginMessage: "در حال انتقال ...",
       },
+      wizard: {
+        legalPerson: "کاربر حقوقی",
+        naturalPerson: "شخص حقیقی",
+      },
       required: "* الزامی",
       loading: "...",
     },

@@ -66,7 +66,6 @@ const CodeInput = (props) => {
   }, [retrySend]);
 
   const onChange = (e) => {
-    console.log("e-----", e, props.form);
     props.form.setFieldsValue({ code: e });
   };
 
