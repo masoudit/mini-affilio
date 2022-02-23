@@ -132,6 +132,7 @@ const slice = createSlice({
       state.loading = false;
       state.error = null;
       state.profile = null;
+      state.register = null;
     },
     updateUser: (state, { payload: { profile, token, fetched = false } }) => {
       state.profile = profile;

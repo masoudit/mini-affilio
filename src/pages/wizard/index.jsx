@@ -1,11 +1,12 @@
-import { Alert, Card, Col, Row, Steps, Switch } from "antd";
-import { Button, Form, Input, InputNumber } from "antd";
+import { Alert, Card, Col, Row, Select, Steps, Switch } from "antd";
+import { Button, Form, Input } from "antd";
+import { DatePicker as DatePickerJalali } from "antd-jalali";
 import { t } from "i18next";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 
-import { USER_TYPE } from "@/utils/constants/apiConstants";
+import { GENDER, USER_TYPE } from "@/utils/constants/apiConstants";
 
 import "./styles.less";
 
@@ -45,45 +46,103 @@ const StepOne = () => {
         name="nest-messages"
         onFinish={onFinish}
         validateMessages={validateMessages}
-        initialValues={{
-          name: "",
-        }}
+        className="afl-form"
+        layout="vertical"
       >
+        <Row gutter={24}>
+          <Col span={24}>
+            <Form.Item
+              name={["user", "firstName"]}
+              label={t("firstName")}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input value="" />
+            </Form.Item>
+          </Col>
+          <Col md={24}>
+            <Form.Item
+              name={["user", "lastName"]}
+              label={t("lastName")}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col md={24}>
+            <Form.Item
+              name={["user", "fatherName"]}
+              label={t("fatherName")}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+        </Row>
+
         <Form.Item
-          name={["user", "firstName"]}
-          label={t("firstName")}
+          name={["user", "gender"]}
+          label={t("gender")}
           rules={[
             {
               required: true,
             },
           ]}
         >
-          <Input value="" />
+          <Select>
+            {Object.keys(GENDER).map((key) => (
+              <Select.Option key={key}>{t(key)}</Select.Option>
+            ))}
+          </Select>
         </Form.Item>
+
         <Form.Item
-          name={["user", "lastName"]}
-          label={t("lastName")}
+          name={["user", "birthday"]}
+          label={t("birthday")}
           rules={[
             {
-              type: "email",
+              required: true,
+            },
+          ]}
+        >
+          <DatePickerJalali />
+        </Form.Item>
+
+        <Form.Item
+          name={["user", "nationalNumber"]}
+          label={t("nationalNumber")}
+          rules={[
+            {
+              required: true,
             },
           ]}
         >
           <Input />
         </Form.Item>
+
         <Form.Item
-          name={["user", "age"]}
-          label="Age"
+          name={["user", "identityNumber"]}
+          label={t("identityNumber")}
           rules={[
             {
-              type: "number",
-              min: 0,
-              max: 99,
+              required: true,
             },
           ]}
         >
-          <InputNumber />
+          <Input />
         </Form.Item>
+
         {/* <Form.Item name={["user", "website"]} label="Website">
           <Input />
         </Form.Item> */}

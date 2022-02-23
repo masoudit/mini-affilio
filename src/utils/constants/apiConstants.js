@@ -104,7 +104,6 @@ export const SORT_ORIENTATION = {
 export const GENDER = {
   FEMALE: 1,
   MALE: 2,
-  UNKNOWN: 3,
 };
 
 export const COMPANY_TYPE = {

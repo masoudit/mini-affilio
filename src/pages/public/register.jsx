@@ -93,7 +93,7 @@ export const Register = () => {
           duration: 2,
         });
         // autoLogin
-        setTimeout(() => navigate("/login"), 1000);
+        setTimeout(() => navigateTo("/login"), 1000);
       }
     }
   }, [register]);
