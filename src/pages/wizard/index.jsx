@@ -1,12 +1,11 @@
-import { Alert, Card, Col, Row, Select, Steps, Switch } from "antd";
-import { Button, Form, Input } from "antd";
-import { DatePicker as DatePickerJalali } from "antd-jalali";
+import { Alert, Card, Col, Row, Steps, Switch } from "antd";
 import { t } from "i18next";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { GENDER, USER_TYPE } from "@/utils/constants/apiConstants";
+import { publisherSetLegal } from "@/app/local/publisherSlice";
+import StepPersonalInfo from "@/components/userInfo/stepPersonalInfo";
+import { USER_TYPE } from "@/utils/constants/apiConstants";
 
 import "./styles.less";
 
@@ -22,148 +21,12 @@ const layout = {
 const { Meta } = Card;
 const { Step } = Steps;
 
-const StepOne = () => {
-  const validateMessages = {
-    required: "${label} is required!",
-    types: {
-      email: "${label} is not a valid email!",
-      number: "${label} is not a valid number!",
-    },
-    number: {
-      range: "${label} must be between ${min} and ${max}",
-    },
-  };
-  const { t } = useTranslation();
-
-  const onFinish = (values) => {
-    console.log(values);
-  };
-
-  return (
-    <>
-      <Form
-        {...layout}
-        name="nest-messages"
-        onFinish={onFinish}
-        validateMessages={validateMessages}
-        className="afl-form"
-        layout="vertical"
-      >
-        <Row gutter={24}>
-          <Col span={24}>
-            <Form.Item
-              name={["user", "firstName"]}
-              label={t("firstName")}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input value="" />
-            </Form.Item>
-          </Col>
-          <Col md={24}>
-            <Form.Item
-              name={["user", "lastName"]}
-              label={t("lastName")}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col md={24}>
-            <Form.Item
-              name={["user", "fatherName"]}
-              label={t("fatherName")}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Form.Item
-          name={["user", "gender"]}
-          label={t("gender")}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Select>
-            {Object.keys(GENDER).map((key) => (
-              <Select.Option key={key}>{t(key)}</Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-
-        <Form.Item
-          name={["user", "birthday"]}
-          label={t("birthday")}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <DatePickerJalali />
-        </Form.Item>
-
-        <Form.Item
-          name={["user", "nationalNumber"]}
-          label={t("nationalNumber")}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          name={["user", "identityNumber"]}
-          label={t("identityNumber")}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        {/* <Form.Item name={["user", "website"]} label="Website">
-          <Input />
-        </Form.Item> */}
-        {/* <Form.Item name={["user", "introduction"]} label="Introduction">
-          <Input.TextArea />
-        </Form.Item> */}
-        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 2 }}>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
-    </>
-  );
-};
-
 export default function RegisterWizard() {
   const [loading, setLoading] = useState(false);
   const [current, setCurrent] = useState(0);
   const [legal, setLegal] = useState(false);
   const [showLegal, setShowLegal] = useState(false);
+  const dispatch = useDispatch();
 
   const { profile } = useSelector((state) => state.account);
   // console.log("e-----", profile?.data?.user_type);
@@ -182,7 +45,18 @@ export default function RegisterWizard() {
     setTimeout(() => {
       setLegal(e);
       setLoading(false);
+      const uId = localStorage.getItem("uId");
+      dispatch(
+        publisherSetLegal({
+          status: legal ? "Legal" : "Natural",
+          uId,
+        })
+      );
     }, 500);
+  };
+
+  const onChange = (e) => {
+    setCurrent(e);
   };
 
   return (
@@ -238,16 +112,27 @@ export default function RegisterWizard() {
             <Steps
               type="navigation"
               current={current}
-              // onChange={onChange}
+              onChange={onChange}
               className="site-navigation-steps"
             >
               <Step status="finish" title="اطلاعات شخصی" />
               <Step status="process" title="اطلاعات تماس" />
-              <Step status="wait" title="اطلاعات پرداخت" />
-              <Step status="wait" title="مالیات بر ارزش افزوده" />
+              <Step status="payment" title="اطلاعات پرداخت" />
+              <Step status="tax" title="مالیات بر ارزش افزوده" />
             </Steps>
             <div className="steps-content">
-              <StepOne />
+              <div className={`content_info ${current === 0 ? "active" : ""}`}>
+                <StepPersonalInfo />
+              </div>
+              <div className={`content_info ${current === 1 ? "active" : ""}`}>
+                222
+              </div>
+              <div className={`content_info ${current === 2 ? "active" : ""}`}>
+                333
+              </div>
+              <div className={`content_info ${current === 4 ? "active" : ""}`}>
+                444
+              </div>
             </div>
           </Card>
         </Col>

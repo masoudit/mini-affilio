@@ -5,6 +5,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import counterReducer from "../pages/features/counter/counterSlice";
 import accountReducer from "./local/accountSlice";
 import appReducer from "./local/appSlice";
+import publisherReducer from "./local/publisherSlice";
 
 // import userReducer from "./local/userSlice";
 
@@ -13,6 +14,7 @@ export const store = configureStore({
     app: appReducer,
     account: accountReducer,
     counter: counterReducer,
+    publisher: publisherReducer,
   },
 
   // Adding the api middleware enables caching, invalidation, polling,
